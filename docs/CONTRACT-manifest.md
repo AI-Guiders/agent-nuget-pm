@@ -14,23 +14,24 @@ Pin manifest is the SSOT mirror for org-wide package pins (e.g. `Directory.Packa
 | Field | Required | Meaning |
 |-------|----------|---------|
 | `schema` | yes | Must be `anpm/manifest/v1` |
-| `feedRoot` | no | Default feed path; `${ANPM_FEED_ROOT}` or env expansion |
+| `feedRoot` | no | Optional per-manifest feed default (prefer `[feed].root` in `anpm.toml`) |
 | `v3BaseUrl` | no | Base URL for generated v3 index |
 | `packages[]` | yes | `{ id, version }` pins |
 
 ## Resolution order
 
 1. Tool argument `feed_root` / `manifest_path`
-2. Env `ANPM_FEED_ROOT` / `ANPM_MANIFEST_PATH`
-3. Manifest `feedRoot`
-4. Default manifest path (when unset): `<repo>/manifest/pins.example.json`
+2. `ANPM_*` env override (escape hatch)
+3. `anpm.toml` `[feed]` (`AnpmConfigLoader` → `AnpmBootstrap`)
+4. Manifest `feedRoot` / `v3BaseUrl`
+5. Default manifest path (when unset): `<repo>/manifest/pins.example.json`
 
 ## Operator workflow
 
 1. Copy `pins.example.json` to your deployment manifest path.
 2. Fill `packages[]` from your consumer `Directory.Packages.props` (or equivalent).
-3. Set `ANPM_FEED_ROOT` to your flat feed directory (local path, UNC, volume mount).
-4. Run `scripts/Sync-AnpmFeed.ps1` or MCP `anpm_feed_sync` from an internet-connected sync host.
+3. Copy `config/anpm.toml.example` → `anpm.toml`; set `[feed].root` (local path, UNC, volume mount).
+4. Run `scripts/Sync-AnpmFeed.ps1 -Config …` or MCP `anpm_feed_sync`.
 
 ## Generated artifacts (feed root)
 

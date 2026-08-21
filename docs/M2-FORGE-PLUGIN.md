@@ -20,10 +20,13 @@ Or set `ForgeAbstractionsProject` to `AgentForge.Abstractions.csproj`.
 
 ## Mount (operator)
 
-Copy `plugins/forge.package-feed.example.toml` into forge `plugins/` and set:
+Copy `plugins/forge.package-feed.example.toml` into forge `plugins/` and merge `config/forge.anpm.example.json` into forge host `appsettings`:
 
-- `ANPM_FEED_ROOT`
-- `ANPM_MANIFEST_PATH`
+- `anpm.feed_root`
+- `anpm.manifest_path`
+- optional `anpm.v3_base_url`
+
+`ANPM_*` env vars remain escape overrides only.
 
 ## Surfaces
 

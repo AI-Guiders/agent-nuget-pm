@@ -34,6 +34,7 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 - [ADR index](docs/adr/README.md)
 - [Overview ADR](docs/adr/ANPM-ADR-0001-overview.md)
 - [MCP tool surface ADR](docs/adr/ANPM-ADR-0004-mcp-tool-surface.md)
+- [TOML config ADR](docs/adr/ANPM-ADR-0005-toml-config.md)
 - [Manifest contract](docs/CONTRACT-manifest.md)
 - [M1 scaffold plan](docs/M1-SCAFFOLD.md)
 - [M0 spec](docs/M0-SPEC.md)
@@ -45,12 +46,12 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 ```powershell
 cd agent-nuget-pm
 dotnet test
-$env:ANPM_FEED_ROOT = 'C:\local\nuget-feed'
-$env:ANPM_MANIFEST_PATH = 'C:\path\to\your\pins.json'   # copy from manifest/pins.example.json
-./scripts/Sync-AnpmFeed.ps1 -FeedRoot $env:ANPM_FEED_ROOT -ManifestPath $env:ANPM_MANIFEST_PATH -DryRun
-./scripts/Start-AnpmHost.ps1 -FeedRoot $env:ANPM_FEED_ROOT
+# Copy config/anpm.toml.example → D:/anpm/anpm.toml and edit [feed] paths.
+./scripts/Sync-AnpmFeed.ps1 -Config D:/anpm/anpm.toml -DryRun
+./scripts/Start-AnpmHost.ps1 -Config D:/anpm/anpm.toml
 # MCP manifest for Cursor (~/.cursor/mcp.json):
-./scripts/_Invoke-AnpmTool.ps1 anpm_mcp_export --command_path D:/path/to/AnpmMcp.exe
+./scripts/_Invoke-AnpmTool.ps1 -Project AnpmMcp/AnpmMcp.csproj -PayloadJson '{"tool":"anpm_mcp_export"}' -Config D:/anpm/anpm.toml
+# Or: args ["--config","D:/anpm/anpm.toml"], env {}
 ```
 
 Point `nuget.config` package source at `http://127.0.0.1:5088/v3/index.json`.

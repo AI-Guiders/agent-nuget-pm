@@ -22,14 +22,16 @@ ADR-0001 named DOI-style tools (`anpm.feed.status`, …). MCP hosts and git-mcp 
 
 ### Configuration
 
-| Env | Meaning |
-|-----|---------|
-| `ANPM_FEED_ROOT` | Flat feed directory |
-| `ANPM_MANIFEST_PATH` | Pin manifest JSON |
-| `ANPM_V3_BASE_URL` | Public v3 base for generated index |
-| `ANPM_REPO_ROOT` | Repo root for default manifest path |
+**SSOT:** `anpm.toml` + `--config` (see [ADR-0005](ANPM-ADR-0005-toml-config.md)). Precedence: tool args → env override → TOML → manifest.
 
-Tool arguments override env/manifest defaults.
+| Env (override) | TOML `[feed]` / `[host]` / `[mcp]` | Meaning |
+|----------------|-------------------------------------|---------|
+| `ANPM_FEED_ROOT` | `root` | Flat feed directory |
+| `ANPM_MANIFEST_PATH` | `manifest_path` | Pin manifest JSON |
+| `ANPM_V3_BASE_URL` | `[host].v3_base_url` | Public v3 base for generated index |
+| `ANPM_HOST_URLS` | `[host].urls` | Kestrel listen URLs |
+| `ANPM_REBUILD_INDEX_ON_START` | `[host].rebuild_index_on_start` | Host startup index rebuild |
+| `ANPM_REPO_ROOT` | `[mcp].repo_root` | Repo root for default manifest path |
 
 ### CLI bridge (scripts)
 

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
+    <SelfContained>true</SelfContained>
+    <LangVersion>14</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AnpmMcp</RootNamespace>
+    <AssemblyName>AnpmMcp</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AnpmMcp.Tests\**\*.cs" />
+    <None Remove="AnpmMcp.Tests\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ModelContextProtocol" Version="1.3.0" />
+    <ProjectReference Include="..\Anpm.Core\Anpm.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -63,6 +63,19 @@ public class ManifestLoaderTests
         Assert.Equal("anpm/manifest/v1", manifest.Schema);
         Assert.Contains(manifest.Packages, p => p.Id == "Contoso.Library" && p.Version == "1.0.0");
     }
+    [Fact]
+    public void Load_reads_guiders_platform_0_4_0_manifest()
+    {
+        var repoRoot = FindRepoRoot();
+        var manifestPath = Path.Combine(repoRoot, "manifest", "guiders-platform-0.4.0.pins.json");
+        var manifest = ManifestLoader.Load(manifestPath);
+
+        Assert.Equal("anpm/manifest/v1", manifest.Schema);
+        Assert.Equal(10, manifest.Packages.Count);
+        Assert.All(manifest.Packages, p => Assert.Equal("0.4.0", p.Version));
+        Assert.Contains(manifest.Packages, p => p.Id == "AIGuiders.Platform.CommandPlane");
+        Assert.Contains(manifest.Packages, p => p.Id == "AIGuiders.Platform.Cockpit.DataBus");
+    }
 
     private static string FindRepoRoot()
     {

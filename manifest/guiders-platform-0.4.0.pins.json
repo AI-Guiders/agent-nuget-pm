@@ -1,0 +1,18 @@
+{
+  "$schema": "./schema.v1.json",
+  "schema": "anpm/manifest/v1",
+  "description": "Guiders Platform SSOT quarry v0.4.0 — offline feed pins for cdp-mcp / cascade-ide / agent-forge (ADR GUIDERS-0003 W4+W5).",
+  "v3BaseUrl": "http://127.0.0.1:5088/v3",
+  "packages": [
+    { "id": "AIGuiders.Platform.Abstractions", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Routing", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Abstractions", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Ids", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.DataBus", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Transport", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Channels", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Composition", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.Cockpit.Cds", "version": "0.4.0" },
+    { "id": "AIGuiders.Platform.CommandPlane", "version": "0.4.0" }
+  ]
+}

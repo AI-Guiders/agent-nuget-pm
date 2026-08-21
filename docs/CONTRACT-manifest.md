@@ -4,6 +4,12 @@ Pin manifest is the SSOT mirror for org-wide package pins (e.g. `Directory.Packa
 
 **This open repo ships only the schema and an example file.** Deployment-specific pin sets live with the operator (private git, config management, CAD contour, etc.) — not in `AI-Guiders/agent-nuget-pm`.
 
+## Guiders Platform (SSOT quarry)
+
+- Manifest: `manifest/guiders-platform-0.4.0.pins.json` — pins all `AIGuiders.Platform.*` packages at **0.4.0** (ADR GUIDERS-0003).
+- Stage local packs (not on nuget.org): `scripts/Stage-GuidersPlatformFeed.ps1 -FeedRoot <path> [-RebuildIndex]`.
+- Then `anpm_feed_index` or `Sync-AnpmFeed.ps1` with `-ManifestPath manifest/guiders-platform-0.4.0.pins.json`.
+
 ## File
 
 - Example: `manifest/pins.example.json` (illustrative only)

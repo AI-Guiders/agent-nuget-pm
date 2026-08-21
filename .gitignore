@@ -1,0 +1,8 @@
+bin/
+obj/
+.vs/
+*.user
+packages/
+*.witdb
+**/nuget-feed/
+.DS_Store

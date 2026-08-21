@@ -12,5 +12,6 @@ public class McpExportTests
         Assert.Contains("anpm_feed_status", json, StringComparison.Ordinal);
         Assert.Contains("anpm_mcp_export", json, StringComparison.Ordinal);
         Assert.Contains("D:/tools/AnpmMcp.exe", json, StringComparison.Ordinal);
+        Assert.Contains("--config", json, StringComparison.Ordinal);
     }
 }

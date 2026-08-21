@@ -1,4 +1,5 @@
 using Anpm.Core;
+using Anpm.Core.Config;
 using Anpm.Core.Feed;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
@@ -14,6 +15,7 @@ public class AnpmHostTests : IDisposable
 
     public AnpmHostTests()
     {
+        AnpmBootstrap.Use(AnpmRuntimeSettings.Empty);
         _feedRoot = Path.Combine(Path.GetTempPath(), "anpm-host-" + Guid.NewGuid().ToString("n"));
         Directory.CreateDirectory(_feedRoot);
         File.WriteAllText(Path.Combine(_feedRoot, "Contoso.A.1.0.0.nupkg"), "fake-nupkg");
@@ -61,6 +63,7 @@ public class AnpmHostTests : IDisposable
         Environment.SetEnvironmentVariable(AnpmSettings.V3BaseUrlVar, null);
         Environment.SetEnvironmentVariable(AnpmSettings.RebuildIndexOnStartVar, null);
         Environment.SetEnvironmentVariable(AnpmSettings.HostUrlsVar, null);
+        AnpmBootstrap.Use(AnpmRuntimeSettings.Empty);
         try { Directory.Delete(_feedRoot, recursive: true); } catch { /* temp */ }
     }
 }

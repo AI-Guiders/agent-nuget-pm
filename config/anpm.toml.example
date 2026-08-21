@@ -1,0 +1,23 @@
+# ANPM config (save outside git, e.g. D:/anpm/anpm.toml)
+#
+# Cursor mcp.json:
+#   "command": "D:/anpm/AnpmMcp.exe",
+#   "args": ["--config", "D:/anpm/anpm.toml"],
+#   "env": {}
+#
+# Precedence: tool args → ANPM_* env override → this file → manifest defaults.
+
+version = 1
+
+[feed]
+root = "C:/local/nuget-feed"
+manifest_path = "C:/config/anpm/pins.json"
+
+[host]
+urls = "http://127.0.0.1:5088"
+v3_base_url = "http://127.0.0.1:5088/v3"
+rebuild_index_on_start = true
+
+[mcp]
+# Optional repo root for default manifest discovery (dev checkout).
+# repo_root = "D:/agent-nuget-pm"

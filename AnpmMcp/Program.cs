@@ -1,9 +1,25 @@
 using System.Collections.Frozen;
 using System.Text.Json;
+using Anpm.Core;
+using Anpm.Core.Config;
 using AnpmMcp;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Tool = ModelContextProtocol.Protocol.Tool;
+
+var bootstrap = AnpmBootstrap.Initialize(args);
+if (bootstrap.IsHelp)
+{
+    PrintUsage();
+    return 0;
+}
+
+if (!bootstrap.IsSuccess)
+{
+    Console.Error.WriteLine(bootstrap.Error ?? "Failed to load ANPM config.");
+    PrintUsage();
+    return 1;
+}
 
 if (TryRunCli(args, out var exitCode))
     return exitCode;
@@ -34,6 +50,17 @@ var transport = new StdioServerTransport("AnpmMcp");
 await using var server = McpServer.Create(transport, options);
 await server.RunAsync();
 return 0;
+
+static void PrintUsage()
+{
+    Console.Error.WriteLine("""
+        AnpmMcp [--config|-c PATH] [--invoke <tool> [--key value ...]]
+
+        Config SSOT: anpm.toml ([feed], [host], [mcp]). See config/anpm.toml.example.
+        Precedence: tool args → ANPM_* env override → TOML → manifest defaults.
+        Default config path when present: config/anpm.toml next to the executable.
+        """);
+}
 
 static CallToolResult InvokeTool(string name, IReadOnlyDictionary<string, JsonElement> args)
 {
@@ -67,14 +94,12 @@ static CallToolResult InvokeTool(string name, IReadOnlyDictionary<string, JsonEl
 static bool TryRunCli(string[] args, out int exitCode)
 {
     exitCode = 0;
-    if (args.Length == 0 || !string.Equals(args[0], "--invoke", StringComparison.Ordinal))
+    var invokeIndex = Array.FindIndex(args, a => string.Equals(a, "--invoke", StringComparison.Ordinal));
+    if (invokeIndex < 0 || invokeIndex + 1 >= args.Length)
         return false;
 
-    if (args.Length < 2)
-        throw new ArgumentException("Usage: AnpmMcp --invoke <tool> [--key value ...]");
-
-    var tool = args[1];
-    var toolArgs = ParseCliArgs(args.AsSpan(2));
+    var tool = args[invokeIndex + 1];
+    var toolArgs = ParseCliArgs(args.AsSpan(invokeIndex + 2));
     var result = InvokeTool(tool, toolArgs);
     var text = result.Content.FirstOrDefault() is TextContentBlock block ? block.Text : string.Empty;
     Console.WriteLine(text);

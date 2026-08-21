@@ -1,0 +1,7 @@
+{
+  "anpm": {
+    "feed_root": "C:/local/nuget-feed",
+    "manifest_path": "C:/config/anpm/pins.json",
+    "v3_base_url": "http://127.0.0.1:5088/v3"
+  }
+}

@@ -1,9 +1,7 @@
-# Mount on Agent Forge (M2). Copy to forge plugins/ and adjust paths.
+# Agent Forge plugin mount (M2). Copy into forge plugins/ and add bundle entry in forge.plugins.toml.
 id = "package-feed"
 assembly = "AgentForge.Plugin.PackageFeed.dll"
 tier = "zoo"
 
-[env]
-ANPM_FEED_ROOT = "C:/local/nuget-feed"
-ANPM_MANIFEST_PATH = "C:/config/anpm/pins.json"
-ANPM_V3_BASE_URL = "http://127.0.0.1:5088/v3"
+# ANPM settings live in forge host appsettings (not here). Example fragment:
+#   config/forge.anpm.example.json

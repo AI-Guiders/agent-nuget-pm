@@ -1,15 +1,18 @@
 param(
     [Parameter()]
-    [string] $FeedRoot = $env:ANPM_FEED_ROOT,
+    [string] $Config,
 
     [Parameter()]
-    [string] $ManifestPath = $env:ANPM_MANIFEST_PATH,
+    [string] $FeedRoot,
 
     [Parameter()]
-    [string] $V3BaseUrl = $env:ANPM_V3_BASE_URL,
+    [string] $ManifestPath,
 
     [Parameter()]
-    [string] $Urls = $env:ANPM_HOST_URLS,
+    [string] $V3BaseUrl,
+
+    [Parameter()]
+    [string] $Urls,
 
     [switch] $NoRebuildIndex
 )
@@ -18,18 +21,19 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $hostProj = Join-Path $repoRoot 'Anpm.Host\Anpm.Host.csproj'
 
-if (-not $FeedRoot) {
-    throw 'Set ANPM_FEED_ROOT or pass -FeedRoot (flat .nupkg directory).'
+$runArgs = @()
+if ($Config) {
+    $runArgs += @('--config', $Config)
+}
+elseif (Test-Path (Join-Path $repoRoot 'config\anpm.toml.example')) {
+    Write-Warning 'No -Config; pass --config anpm.toml or copy config/anpm.toml.example.'
 }
 
-if (-not $V3BaseUrl) { $V3BaseUrl = 'http://127.0.0.1:5088/v3' }
-if (-not $Urls) { $Urls = 'http://127.0.0.1:5088' }
-
-$env:ANPM_FEED_ROOT = $FeedRoot
+if ($FeedRoot) { $env:ANPM_FEED_ROOT = $FeedRoot }
 if ($ManifestPath) { $env:ANPM_MANIFEST_PATH = $ManifestPath }
-$env:ANPM_V3_BASE_URL = $V3BaseUrl
-$env:ANPM_HOST_URLS = $Urls
-$env:ANPM_REBUILD_INDEX_ON_START = $(if ($NoRebuildIndex) { 'false' } else { 'true' })
+if ($V3BaseUrl) { $env:ANPM_V3_BASE_URL = $V3BaseUrl }
+if ($Urls) { $env:ANPM_HOST_URLS = $Urls }
+if ($NoRebuildIndex) { $env:ANPM_REBUILD_INDEX_ON_START = 'false' }
 
-Write-Host "ANPM host · feed=$FeedRoot · v3=$V3BaseUrl · listen=$Urls"
-dotnet run --project $hostProj --no-launch-profile
+Write-Host "ANPM host · config=$(if ($Config) { $Config } else { 'default/env' })"
+dotnet run --project $hostProj --no-launch-profile -- @runArgs

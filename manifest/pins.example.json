@@ -1,7 +1,6 @@
 {
   "$schema": "./schema.v1.json",
   "schema": "anpm/manifest/v1",
-  "feedRoot": "${ANPM_FEED_ROOT}",
   "v3BaseUrl": "http://127.0.0.1:5088/v3",
   "packages": [
     {

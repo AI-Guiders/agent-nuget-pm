@@ -55,9 +55,10 @@ internal static class ToolHandlers
         IndexRebuildReport? index = null;
         if (rebuildIndex && !dryRun && sync.Errors.Count == 0)
         {
-            var v3Base = GetOptionalString(args, "v3_base_url")
-                ?? Environment.GetEnvironmentVariable(AnpmEnvironment.V3BaseUrlVar)
-                ?? manifest.V3BaseUrl;
+            var v3Base = AnpmSettings.FirstNonEmpty(
+                GetOptionalString(args, "v3_base_url"),
+                AnpmSettings.ResolveV3BaseUrl(),
+                manifest.V3BaseUrl);
             index = V3IndexWriter.Rebuild(feedRoot, v3Base);
         }
 
@@ -69,9 +70,10 @@ internal static class ToolHandlers
         var manifestPath = AnpmEnvironment.ResolveManifestPath(GetOptionalString(args, "manifest_path"));
         var manifest = ManifestLoader.Load(manifestPath);
         var feedRoot = ManifestLoader.ResolveFeedRoot(manifest, GetOptionalString(args, "feed_root"));
-        var v3Base = GetOptionalString(args, "v3_base_url")
-            ?? Environment.GetEnvironmentVariable(AnpmEnvironment.V3BaseUrlVar)
-            ?? manifest.V3BaseUrl;
+        var v3Base = AnpmSettings.FirstNonEmpty(
+            GetOptionalString(args, "v3_base_url"),
+            AnpmSettings.ResolveV3BaseUrl(),
+            manifest.V3BaseUrl);
         var report = V3IndexWriter.Rebuild(feedRoot, v3Base);
         return AnpmJson.Serialize(report);
     }

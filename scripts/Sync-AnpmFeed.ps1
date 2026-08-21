@@ -1,5 +1,6 @@
 [CmdletBinding()]
 param(
+    [string] $Config,
     [string] $ManifestPath,
     [string] $FeedRoot,
     [string] $V3BaseUrl,
@@ -12,25 +13,25 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-if (-not $ManifestPath) {
-    $ManifestPath = $env:ANPM_MANIFEST_PATH
+if (-not $Config) {
+    $defaultConfig = Join-Path $repoRoot 'config\anpm.toml.example'
+    if (Test-Path $defaultConfig) {
+        Write-Warning "No -Config; using example $defaultConfig (copy to anpm.toml for production)."
+        $Config = $defaultConfig
+    }
+}
+
+if (-not $ManifestPath -and $Config) {
+    # Manifest path usually lives in TOML; tool args below can still override per call.
+    $ManifestPath = $null
 }
 if (-not $ManifestPath) {
     $ManifestPath = Join-Path $repoRoot 'manifest\pins.example.json'
 }
 
-if (-not $FeedRoot) {
-    $FeedRoot = $env:ANPM_FEED_ROOT
+if (-not $FeedRoot -and -not $Config -and -not $env:ANPM_FEED_ROOT) {
+    throw 'FeedRoot is required: set [feed].root in anpm.toml (-Config), pass -FeedRoot, or ANPM_FEED_ROOT override.'
 }
-
-if (-not $FeedRoot) {
-    throw 'FeedRoot is required: -FeedRoot or env ANPM_FEED_ROOT.'
-}
-
-$env:ANPM_REPO_ROOT = $repoRoot
-$env:ANPM_FEED_ROOT = $FeedRoot
-$env:ANPM_MANIFEST_PATH = $ManifestPath
-if ($V3BaseUrl) { $env:ANPM_V3_BASE_URL = $V3BaseUrl }
 
 $mcpProject = Join-Path $repoRoot 'AnpmMcp\AnpmMcp.csproj'
 if (-not (Test-Path $mcpProject)) {
@@ -49,17 +50,18 @@ function Invoke-AnpmTool {
         throw "Missing runner: $runner"
     }
 
-    & $runner -Project $mcpProject -PayloadJson $payload
+    & $runner -Project $mcpProject -PayloadJson $payload -Config $Config
 }
 
 Write-Host "ANPM sync" -ForegroundColor Cyan
+Write-Host "  config:   $(if ($Config) { $Config } else { '(default / env)' })"
 Write-Host "  manifest: $ManifestPath"
 Write-Host "  feed:     $FeedRoot"
 
-$statusJson = Invoke-AnpmTool -Tool 'anpm_feed_status' -Args @{
-    manifest_path = $ManifestPath
-    feed_root     = $FeedRoot
-}
+$statusArgs = @{}
+if ($ManifestPath) { $statusArgs.manifest_path = $ManifestPath }
+if ($FeedRoot) { $statusArgs.feed_root = $FeedRoot }
+$statusJson = Invoke-AnpmTool -Tool 'anpm_feed_status' -Args $statusArgs
 Write-Host $statusJson
 
 if ($StatusOnly) {
@@ -67,27 +69,24 @@ if ($StatusOnly) {
 }
 
 if ($DryRun) {
-    $syncJson = Invoke-AnpmTool -Tool 'anpm_feed_sync' -Args @{
-        manifest_path = $ManifestPath
-        feed_root     = $FeedRoot
-        dry_run       = $true
-        rebuild_index = $false
-    }
+    $dryArgs = @{ dry_run = $true; rebuild_index = $false }
+    if ($ManifestPath) { $dryArgs.manifest_path = $ManifestPath }
+    if ($FeedRoot) { $dryArgs.feed_root = $FeedRoot }
+    $syncJson = Invoke-AnpmTool -Tool 'anpm_feed_sync' -Args $dryArgs
     Write-Host $syncJson
     return
 }
 
-$syncJson = Invoke-AnpmTool -Tool 'anpm_feed_sync' -Args @{
-    manifest_path = $ManifestPath
-    feed_root     = $FeedRoot
+$syncArgs = @{
     dry_run       = $false
     rebuild_index = (-not $SkipIndex)
-    v3_base_url   = $V3BaseUrl
 }
+if ($ManifestPath) { $syncArgs.manifest_path = $ManifestPath }
+if ($FeedRoot) { $syncArgs.feed_root = $FeedRoot }
+if ($V3BaseUrl) { $syncArgs.v3_base_url = $V3BaseUrl }
+
+$syncJson = Invoke-AnpmTool -Tool 'anpm_feed_sync' -Args $syncArgs
 Write-Host $syncJson
 
-$finalStatus = Invoke-AnpmTool -Tool 'anpm_feed_status' -Args @{
-    manifest_path = $ManifestPath
-    feed_root     = $FeedRoot
-}
+$finalStatus = Invoke-AnpmTool -Tool 'anpm_feed_status' -Args $statusArgs
 Write-Host $finalStatus

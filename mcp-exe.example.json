@@ -2,11 +2,8 @@
   "mcpServers": {
     "anpm": {
       "command": "D:\\path\\to\\AnpmMcp.exe",
-      "args": [],
-      "env": {
-        "ANPM_FEED_ROOT": "C:\\local\\nuget-feed",
-        "ANPM_MANIFEST_PATH": "C:\\path\\to\\your\\pins.json"
-      }
+      "args": ["--config", "D:\\path\\to\\anpm.toml"],
+      "env": {}
     }
   }
 }

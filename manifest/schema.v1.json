@@ -1,0 +1,30 @@
+{
+  "$id": "anpm/manifest/v1",
+  "title": "ANPM pin manifest",
+  "type": "object",
+  "required": ["schema", "packages"],
+  "properties": {
+    "schema": {
+      "const": "anpm/manifest/v1"
+    },
+    "feedRoot": {
+      "type": "string",
+      "description": "Default feed directory. Supports env expansion and ${VAR} tokens."
+    },
+    "v3BaseUrl": {
+      "type": "string",
+      "description": "Public base URL embedded into generated v3 index files."
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version"],
+        "properties": {
+          "id": { "type": "string" },
+          "version": { "type": "string" }
+        }
+      }
+    }
+  }
+}

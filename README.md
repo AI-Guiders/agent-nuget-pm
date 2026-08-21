@@ -26,13 +26,26 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 | Phase | Deliverable |
 |-------|-------------|
 | **M0** | Spec + sync script pattern |
-| **M1** | Standalone host: feed + minimal v3 index + MCP |
+| **M1** | Standalone host: feed + minimal v3 index + MCP ← **scaffold started** |
 | **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) for LDAP/catalog |
 
 ## Docs
 
 - [ADR index](docs/adr/README.md)
 - [Overview ADR](docs/adr/ANPM-ADR-0001-overview.md)
+- [MCP tool surface ADR](docs/adr/ANPM-ADR-0004-mcp-tool-surface.md)
+- [Manifest contract](docs/CONTRACT-manifest.md)
+- [M1 scaffold plan](docs/M1-SCAFFOLD.md)
+
+## Quick start (M1 scaffold)
+
+```powershell
+cd agent-nuget-pm
+dotnet test
+$env:ANPM_FEED_ROOT = 'C:\local\nuget-feed'
+$env:ANPM_MANIFEST_PATH = 'C:\path\to\your\pins.json'   # copy from manifest/pins.example.json
+./scripts/Sync-AnpmFeed.ps1 -FeedRoot $env:ANPM_FEED_ROOT -ManifestPath $env:ANPM_MANIFEST_PATH -DryRun
+```
 
 ## Related (AI-Guiders)
 
@@ -41,5 +54,4 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 
 ## Status
 
-**Concept / M0** — repository bootstrap. No production host yet.
-
+**Concept / M1 scaffold** — MCP + Core + manifest contract; HTTP host next.

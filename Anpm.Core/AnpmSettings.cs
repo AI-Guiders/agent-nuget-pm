@@ -7,25 +7,25 @@ public static class AnpmSettings
     public const string V3BaseUrlVar = "ANPM_V3_BASE_URL";
     public const string HostUrlsVar = "ANPM_HOST_URLS";
     public const string RebuildIndexOnStartVar = "ANPM_REBUILD_INDEX_ON_START";
+    public const string RepoRootVar = "ANPM_REPO_ROOT";
+
+    public const string DefaultV3BaseUrl = "http://127.0.0.1:5088/v3";
+    public const string DefaultHostUrls = "http://127.0.0.1:5088";
 
     public static string RequireFeedRoot(string? overrideValue = null)
     {
-        var candidate = overrideValue?.Trim();
+        var candidate = FirstNonEmpty(overrideValue, AnpmBootstrap.Current.FeedRoot);
         if (string.IsNullOrWhiteSpace(candidate))
-            candidate = Environment.GetEnvironmentVariable(FeedRootVar);
-
-        if (string.IsNullOrWhiteSpace(candidate))
-            throw new InvalidOperationException($"{FeedRootVar} is required.");
+            throw new InvalidOperationException(
+                $"{FeedRootVar} is required (tool arg, env override, or [feed].root in anpm.toml).");
 
         return Path.GetFullPath(candidate);
     }
 
-    public static string ResolveV3BaseUrl(string? overrideValue = null, string defaultValue = "http://127.0.0.1:5088/v3")
+    public static string ResolveV3BaseUrl(string? overrideValue = null, string? defaultValue = null)
     {
-        var candidate = overrideValue?.Trim();
-        if (string.IsNullOrWhiteSpace(candidate))
-            candidate = Environment.GetEnvironmentVariable(V3BaseUrlVar);
-
+        defaultValue ??= DefaultV3BaseUrl;
+        var candidate = FirstNonEmpty(overrideValue, AnpmBootstrap.Current.V3BaseUrl);
         if (string.IsNullOrWhiteSpace(candidate))
             return defaultValue;
 
@@ -33,12 +33,46 @@ public static class AnpmSettings
         return candidate.Length == 0 ? defaultValue : candidate;
     }
 
-    public static bool RebuildIndexOnStart(bool defaultValue = true)
+    public static string ResolveHostUrls(string? overrideValue = null, string? defaultValue = null)
     {
-        var raw = Environment.GetEnvironmentVariable(RebuildIndexOnStartVar);
-        if (string.IsNullOrWhiteSpace(raw))
-            return defaultValue;
+        defaultValue ??= DefaultHostUrls;
+        var candidate = FirstNonEmpty(overrideValue, AnpmBootstrap.Current.HostUrls);
+        return string.IsNullOrWhiteSpace(candidate) ? defaultValue : candidate.Trim();
+    }
 
-        return bool.TryParse(raw, out var parsed) ? parsed : defaultValue;
+    public static bool RebuildIndexOnStart(bool defaultValue = true) =>
+        AnpmBootstrap.Current.RebuildIndexOnStart ?? defaultValue;
+
+    public static string? ResolveManifestPath(string? overrideValue = null) =>
+        FirstNonEmpty(overrideValue, AnpmBootstrap.Current.ManifestPath);
+
+    public static string ResolveRepoRoot(string? overrideValue = null)
+    {
+        var fromConfig = FirstNonEmpty(overrideValue, AnpmBootstrap.Current.RepoRoot);
+        if (!string.IsNullOrWhiteSpace(fromConfig))
+            return Path.GetFullPath(fromConfig);
+
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (dir is not null)
+        {
+            if (File.Exists(Path.Combine(dir.FullName, "AnpmMcp.slnx"))
+                || File.Exists(Path.Combine(dir.FullName, "manifest", "pins.example.json")))
+                return dir.FullName;
+
+            dir = dir.Parent;
+        }
+
+        return Directory.GetCurrentDirectory();
+    }
+
+    public static string? FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+                return value.Trim();
+        }
+
+        return null;
     }
 }

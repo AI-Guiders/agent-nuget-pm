@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Anpm.Core;
 using Anpm.Core.Models;
 
 namespace Anpm.Core.Feed;
@@ -49,15 +50,14 @@ public static class ManifestLoader
 
     public static string ResolveFeedRoot(AnpmManifest manifest, string? feedRootOverride)
     {
-        var candidate = feedRootOverride?.Trim();
-        if (string.IsNullOrWhiteSpace(candidate))
-            candidate = Environment.GetEnvironmentVariable("ANPM_FEED_ROOT");
+        var candidate = AnpmSettings.FirstNonEmpty(
+            feedRootOverride,
+            AnpmBootstrap.Current.FeedRoot,
+            manifest.FeedRoot);
 
         if (string.IsNullOrWhiteSpace(candidate))
-            candidate = manifest.FeedRoot;
-
-        if (string.IsNullOrWhiteSpace(candidate))
-            throw new ArgumentException("feed_root is required (argument, ANPM_FEED_ROOT, or manifest.feedRoot).");
+            throw new ArgumentException(
+                "feed_root is required (tool arg, [feed].root in anpm.toml, ANPM_FEED_ROOT override, or manifest.feedRoot).");
 
         return Path.GetFullPath(ExpandTokens(candidate)!);
     }

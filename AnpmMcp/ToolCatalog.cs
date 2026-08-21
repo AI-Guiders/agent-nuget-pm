@@ -62,7 +62,7 @@ internal static class ToolCatalog
         {
             Name = "anpm_feed_index",
             Description =
-                "Rebuild flat feed scan + minimal v3 index files under feed_root/.anpm/v3 (static index; HTTP host M1 follow-up).",
+                "Rebuild flat feed scan + minimal v3 index files under feed_root/.anpm/v3. Pair with Anpm.Host for dotnet restore.",
             InputSchema = Schema(new
             {
                 type = "object",
@@ -90,6 +90,20 @@ internal static class ToolCatalog
                     dry_run = new { type = "boolean", description = "Default true." }
                 },
                 required = new[] { "target_path" }
+            })
+        },
+        new()
+        {
+            Name = "anpm_mcp_export",
+            Description =
+                "Export Cursor-style MCP server manifest JSON (tools + env hints). Optional command_path for mcp.json.",
+            InputSchema = Schema(new
+            {
+                type = "object",
+                properties = new
+                {
+                    command_path = new { type = "string", description = "Path to AnpmMcp.exe in generated manifest." }
+                }
             })
         }
     ];

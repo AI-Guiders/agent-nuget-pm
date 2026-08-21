@@ -2,9 +2,9 @@ namespace AnpmMcp;
 
 internal static class AnpmEnvironment
 {
-    internal const string FeedRootVar = "ANPM_FEED_ROOT";
-    internal const string ManifestPathVar = "ANPM_MANIFEST_PATH";
-    internal const string V3BaseUrlVar = "ANPM_V3_BASE_URL";
+    internal const string FeedRootVar = Anpm.Core.AnpmSettings.FeedRootVar;
+    internal const string ManifestPathVar = Anpm.Core.AnpmSettings.ManifestPathVar;
+    internal const string V3BaseUrlVar = Anpm.Core.AnpmSettings.V3BaseUrlVar;
     internal const string RepoRootVar = "ANPM_REPO_ROOT";
 
     internal static string ResolveManifestPath(string? manifestPath)

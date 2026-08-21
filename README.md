@@ -25,9 +25,9 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 
 | Phase | Deliverable |
 |-------|-------------|
-| **M0** | Spec + sync script pattern |
-| **M1** | Standalone host: feed + minimal v3 index + MCP ← **scaffold started** |
-| **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) for LDAP/catalog |
+| **M0** | Spec + sync script pattern | **done** |
+| **M1** | Standalone host: feed + v3 index + MCP + HTTP | **done** |
+| **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) | **done** |
 
 ## Docs
 
@@ -36,6 +36,9 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 - [MCP tool surface ADR](docs/adr/ANPM-ADR-0004-mcp-tool-surface.md)
 - [Manifest contract](docs/CONTRACT-manifest.md)
 - [M1 scaffold plan](docs/M1-SCAFFOLD.md)
+- [M0 spec](docs/M0-SPEC.md)
+- [M2 Forge plugin](docs/M2-FORGE-PLUGIN.md)
+- [Roadmap](docs/ROADMAP.md)
 
 ## Quick start (M1 scaffold)
 
@@ -45,7 +48,12 @@ dotnet test
 $env:ANPM_FEED_ROOT = 'C:\local\nuget-feed'
 $env:ANPM_MANIFEST_PATH = 'C:\path\to\your\pins.json'   # copy from manifest/pins.example.json
 ./scripts/Sync-AnpmFeed.ps1 -FeedRoot $env:ANPM_FEED_ROOT -ManifestPath $env:ANPM_MANIFEST_PATH -DryRun
+./scripts/Start-AnpmHost.ps1 -FeedRoot $env:ANPM_FEED_ROOT
+# MCP manifest for Cursor (~/.cursor/mcp.json):
+./scripts/_Invoke-AnpmTool.ps1 anpm_mcp_export --command_path D:/path/to/AnpmMcp.exe
 ```
+
+Point `nuget.config` package source at `http://127.0.0.1:5088/v3/index.json`.
 
 ## Related (AI-Guiders)
 
@@ -54,4 +62,4 @@ $env:ANPM_MANIFEST_PATH = 'C:\path\to\your\pins.json'   # copy from manifest/pin
 
 ## Status
 
-**Concept / M1 scaffold** — MCP + Core + manifest contract; HTTP host next.
+**M0–M2 shipped** — standalone ANPM + optional Forge plugin; WitDB index + CAD e2e = next.

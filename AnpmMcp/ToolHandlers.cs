@@ -17,6 +17,7 @@ internal static class ToolHandlers
             "anpm_feed_sync" => FeedSync(args),
             "anpm_feed_index" => FeedIndex(args),
             "anpm_restore_verify" => RestoreVerify(args),
+            "anpm_mcp_export" => ExportMcpManifest(args),
             _ => throw new ArgumentException($"Unknown tool: {name}")
         };
 
@@ -73,6 +74,12 @@ internal static class ToolHandlers
             ?? manifest.V3BaseUrl;
         var report = V3IndexWriter.Rebuild(feedRoot, v3Base);
         return AnpmJson.Serialize(report);
+    }
+
+    private static string ExportMcpManifest(IReadOnlyDictionary<string, JsonElement> args)
+    {
+        var commandPath = GetOptionalString(args, "command_path");
+        return McpExport.BuildManifestJson(commandPath);
     }
 
     private static string RestoreVerify(IReadOnlyDictionary<string, JsonElement> args)

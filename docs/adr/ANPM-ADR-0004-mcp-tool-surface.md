@@ -45,7 +45,7 @@ Tool arguments override env/manifest defaults.
 
 **Pros:** Parity with git-mcp; scriptable sync; operators configure feed/manifest via env only.
 
-**Cons:** v3 index is static files until M1 HTTP host ships; `anpm_feed_sync` requires inet + dotnet CLI on sync machine.
+**Cons:** v3 index served by `Anpm.Host`; sync host requires inet + dotnet CLI.
 
 ## Links
 

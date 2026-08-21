@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <ForgeAbstractionsProject Condition="'$(ForgeAbstractionsProject)' == ''">$(MSBuildThisFileDirectory)..\agent-forge\src\AgentForge.Abstractions\AgentForge.Abstractions.csproj</ForgeAbstractionsProject>
+    <BuildForgePlugin Condition="'$(BuildForgePlugin)' == ''">false</BuildForgePlugin>
+    <BuildForgePlugin Condition="Exists('$(ForgeAbstractionsProject)')">true</BuildForgePlugin>
+  </PropertyGroup>
+</Project>

@@ -1,7 +1,7 @@
 # ANPM-ADR-0003: Forge plugin boundary (optional M2)
 
 **Date:** 2026-08-21  
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 

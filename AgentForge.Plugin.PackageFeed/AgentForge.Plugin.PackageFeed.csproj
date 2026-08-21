@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AgentForge.Plugin.PackageFeed</RootNamespace>
+    <AssemblyName>AgentForge.Plugin.PackageFeed</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Anpm.Core\Anpm.Core.csproj" />
+    <ProjectReference Condition="'$(BuildForgePlugin)' == 'true'" Include="$(ForgeAbstractionsProject)" />
+  </ItemGroup>
+
+</Project>

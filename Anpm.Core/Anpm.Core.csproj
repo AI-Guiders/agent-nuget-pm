@@ -15,17 +15,16 @@
     </AssemblyAttribute>
   </ItemGroup>
 
-  <PropertyGroup>
-    <GuidersPluginHostRoot Condition="'$(GuidersPluginHostRoot)' == ''">$(MSBuildThisFileDirectory)..\..\guiders-plugin-host</GuidersPluginHostRoot>
-    <UseLocalGuidersPluginHost Condition="'$(UseLocalGuidersPluginHost)' == '' and Exists('$(GuidersPluginHostRoot)\AIGuiders.PluginHost.slnx')">true</UseLocalGuidersPluginHost>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Tomlyn" Version="0.19.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseLocalGuidersPluginHost)' == 'true'">
     <ProjectReference Include="$(GuidersPluginHostRoot)\src\AIGuiders.PluginHost.Runtime\AIGuiders.PluginHost.Runtime.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseLocalGuidersPluginHost)' != 'true'">
+    <PackageReference Include="AIGuiders.PluginHost.Runtime" Version="$(GuidersPluginHostPackageVersion)" />
   </ItemGroup>
 
 </Project>

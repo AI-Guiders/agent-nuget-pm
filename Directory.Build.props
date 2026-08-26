@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <ForgeAbstractionsProject Condition="'$(ForgeAbstractionsProject)' == ''">$(MSBuildThisFileDirectory)..\agent-forge\src\AgentForge.Abstractions\AgentForge.Abstractions.csproj</ForgeAbstractionsProject>
-    <BuildForgePlugin Condition="'$(BuildForgePlugin)' == ''">false</BuildForgePlugin>
-    <BuildForgePlugin Condition="Exists('$(ForgeAbstractionsProject)')">true</BuildForgePlugin>
+    <GuidersPluginHostPackageVersion>0.1.0</GuidersPluginHostPackageVersion>
+    <GuidersPluginHostRoot Condition="'$(GuidersPluginHostRoot)' == ''">$(MSBuildThisFileDirectory)..\guiders-plugin-host</GuidersPluginHostRoot>
+    <UseLocalGuidersPluginHost Condition="'$(UseLocalGuidersPluginHost)' == '' and Exists('$(GuidersPluginHostRoot)\AIGuiders.PluginHost.slnx')">true</UseLocalGuidersPluginHost>
   </PropertyGroup>
 </Project>

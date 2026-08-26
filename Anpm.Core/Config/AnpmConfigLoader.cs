@@ -1,5 +1,7 @@
+using AIGuiders.Cli;
 using Tomlyn;
 using Tomlyn.Model;
+using Tomlyn.Serialization;
 
 namespace Anpm.Core.Config;
 
@@ -67,36 +69,26 @@ public static class AnpmConfigLoader
     private static string? ResolveConfigPath(string[] args, out string? error)
     {
         error = null;
-        for (var i = 0; i < args.Length; i++)
+        try
         {
-            var arg = args[i];
-            if (arg is "--help" or "-h")
-            {
-                error = null;
+            if (ConfigPathResolver.IsHelp(args))
                 return null;
-            }
 
-            if (arg is "--config" or "-c")
-            {
-                if (i + 1 >= args.Length)
-                {
-                    error = "--config requires a file path.";
-                    return null;
-                }
+            var resolved = ConfigPathResolver.TryResolve(args);
+            if (!string.IsNullOrWhiteSpace(resolved))
+                return resolved;
 
-                return args[++i];
-            }
-
-            if (arg.StartsWith("--config=", StringComparison.Ordinal))
-                return arg["--config=".Length..];
+            var defaultPath = Path.Combine(AppContext.BaseDirectory, DefaultConfigRelativePath);
+            return File.Exists(defaultPath) ? defaultPath : null;
         }
-
-        var defaultPath = Path.Combine(AppContext.BaseDirectory, DefaultConfigRelativePath);
-        return File.Exists(defaultPath) ? defaultPath : null;
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            return null;
+        }
     }
 
-    private static bool HasHelp(string[] args) =>
-        args.Any(arg => arg is "--help" or "-h");
+    private static bool HasHelp(string[] args) => ConfigPathResolver.IsHelp(args);
 
     private static TomlTable? ReadTable(TomlTable? table) => table;
 
@@ -184,7 +176,8 @@ internal static class AnpmTomlParser
 
     internal static AnpmTomlValues Parse(string text)
     {
-        var model = Toml.ToModel(text);
+        var model = TomlSerializer.Deserialize<TomlTable>(text)
+            ?? throw new InvalidOperationException("Empty TOML document.");
         var version = ReadInt(model, "version");
         if (version is not null && version != SupportedVersion)
             throw new InvalidOperationException($"Unsupported version {version}; expected {SupportedVersion}.");

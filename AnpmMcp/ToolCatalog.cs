@@ -94,6 +94,21 @@ internal static class ToolCatalog
         },
         new()
         {
+            Name = "anpm_plugin_verify",
+            Description =
+                "Verify PluginHost package layout (manifest.toml + lib/*.dll). DOI alias: anpm.plugin.verify.",
+            InputSchema = Schema(new
+            {
+                type = "object",
+                properties = new
+                {
+                    package_root = new { type = "string", description = "Root of extracted plugin package directory." }
+                },
+                required = new[] { "package_root" }
+            })
+        },
+        new()
+        {
             Name = "anpm_mcp_export",
             Description =
                 "Export Cursor-style MCP server manifest JSON (tools + env hints). Optional command_path for mcp.json.",

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Anpm.Core;
 using Anpm.Core.Feed;
 using Anpm.Core.Models;
+using Anpm.Core.PluginHost;
 using Anpm.Core.Restore;
 using Anpm.Core.Sync;
 
@@ -17,6 +18,7 @@ internal static class ToolHandlers
             "anpm_feed_sync" => FeedSync(args),
             "anpm_feed_index" => FeedIndex(args),
             "anpm_restore_verify" => RestoreVerify(args),
+            "anpm_plugin_verify" => PluginVerify(args),
             "anpm_mcp_export" => ExportMcpManifest(args),
             _ => throw new ArgumentException($"Unknown tool: {name}")
         };
@@ -93,6 +95,12 @@ internal static class ToolHandlers
         var dryRun = GetOptionalBool(args, "dry_run") ?? true;
         var report = RestoreVerifyService.Verify(targetPath, feedRoot, dryRun);
         return AnpmJson.Serialize(report);
+    }
+
+    private static string PluginVerify(IReadOnlyDictionary<string, JsonElement> args)
+    {
+        var packageRoot = GetRequiredString(args, "package_root");
+        return AnpmJson.Serialize(PluginPackageVerifyService.Verify(packageRoot));
     }
 
     private static string? GetOptionalString(IReadOnlyDictionary<string, JsonElement> args, string name) =>

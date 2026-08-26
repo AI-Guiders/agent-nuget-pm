@@ -5,6 +5,7 @@
 | **M0** | Spec, manifest contract, sync script | **done** — [M0-SPEC.md](M0-SPEC.md) |
 | **M1** | Core, MCP, v3 index, HTTP host, CI, export | **done** — [M1-SCAFFOLD.md](M1-SCAFFOLD.md) |
 | **M2** | Optional Forge `Plugin.PackageFeed` | **done** — [M2-FORGE-PLUGIN.md](M2-FORGE-PLUGIN.md) |
+| **M3** | `Anpm.View` + dual delivery (standalone + Forge adapter) | planned — [ADR-0006](adr/ANPM-ADR-0006-dual-delivery-and-human-view.md) |
 | **M1+** | WitDB feed index (optional) | backlog |
 | **CAD** | Pilot restore e2e, LUS, UNC manifest | operator contour — KB only |
 

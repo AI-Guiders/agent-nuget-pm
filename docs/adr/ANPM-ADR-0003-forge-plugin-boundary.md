@@ -13,8 +13,8 @@ Private forge deployments may mount optional plugins; open ANPM stays consumer-n
 
 | Layer | Repo | Host |
 |-------|------|------|
-| **ANPM core + MCP** | `AI-Guiders/agent-nuget-pm` | Any (CLI, Windows service, container) |
-| **Forge plugin** | Same repo, `src/AgentForge.Plugin.PackageFeed/` | Optional mount on forge |
+| **ANPM core + MCP + View** | `AI-Guiders/agent-nuget-pm` | Standalone `Anpm.Host` **or** optional Forge mount |
+| **Forge plugin** | Same repo, `AgentForge.Plugin.PackageFeed/` | Thin host adapter over shared `Anpm.View` ([0006](ANPM-ADR-0006-dual-delivery-and-human-view.md)) |
 | **Consumer wiring** | Operator / private contour | `nuget.config`, LUS, pin manifest — **not** in open repo |
 
 Plugin provides: LDAP auth, catalog link, `/package sync` commands, WitDB co-location — **not** required for M1 standalone.

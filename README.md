@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Primary interface** | MCP tools + DOI-style commands |
-| **Human UI** | Thin view / admin (optional Forge plugin) |
+| **Human UI** | **`Anpm.View`** — co-primary; standalone `Anpm.Host` or Forge mount ([ADR-0006](docs/adr/ANPM-ADR-0006-dual-delivery-and-human-view.md)) |
 | **Storage** | Flat `.nupkg` feed (UNC, volume, object store) |
 | **Index** | WitDB (planned) or JSON manifest (M0) |
 

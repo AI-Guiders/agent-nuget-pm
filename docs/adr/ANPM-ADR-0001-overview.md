@@ -20,7 +20,7 @@ Build **ANPM** as a **separate open repo** on GitHub (`AI-Guiders/agent-nuget-pm
 
 - **Consumer-neutral** — no deployment-specific manifests or paths in GitHub
 - **Optional** Forge plugin later (M2) — mount on customer forge instances
-- **MCP-first** API; human UI secondary
+- **MCP-first** API; **human View co-primary** (dual delivery — [0006](ANPM-ADR-0006-dual-delivery-and-human-view.md))
 
 ### Architecture
 

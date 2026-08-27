@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Anpm.View</RootNamespace>
+    <AssemblyName>Anpm.View</AssemblyName>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <GuidersUiPlatformRoot Condition="'$(GuidersUiPlatformRoot)' == ''">$(MSBuildThisFileDirectory)..\..\guiders-ui-platform</GuidersUiPlatformRoot>
+    <UseLocalGuidersUiPlatform Condition="'$(UseLocalGuidersUiPlatform)' == '' AND Exists('$(GuidersUiPlatformRoot)\AIGuiders.UI.slnx')">true</UseLocalGuidersUiPlatform>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\Anpm.Core\Anpm.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseLocalGuidersUiPlatform)' == 'true'">
+    <ProjectReference Include="$(GuidersUiPlatformRoot)\src\AIGuiders.UI.Web.HTMX\AIGuiders.UI.Web.HTMX.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseLocalGuidersUiPlatform)' != 'true'">
+    <PackageReference Include="AIGuiders.UI.Web.HTMX" Version="0.1.0" />
+  </ItemGroup>
+
+</Project>

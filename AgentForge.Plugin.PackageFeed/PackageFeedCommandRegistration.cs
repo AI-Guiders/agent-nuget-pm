@@ -20,7 +20,7 @@ internal static class PackageFeedCommandRegistration
             RequiredCapabilities = ["read"],
             Bindings = new ForgeCommandBindings
             {
-                View = "/api/v1/package-feed/status",
+                View = $"{PackageFeedForgePlugin.ViewRoutePrefix}/feed",
             },
         });
 
@@ -38,7 +38,7 @@ internal static class PackageFeedCommandRegistration
             RequiredCapabilities = ["write"],
             Bindings = new ForgeCommandBindings
             {
-                View = "/api/v1/package-feed/sync",
+                View = $"{PackageFeedForgePlugin.ViewRoutePrefix}/feed",
             },
         });
     }

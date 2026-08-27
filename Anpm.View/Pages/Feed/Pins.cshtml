@@ -1,0 +1,57 @@
+@using AIGuiders.UI.Core.PageChrome
+@model Anpm.View.Models.PinMatrixModel
+@{
+    var prefix = Model.RoutePrefix.TrimEnd('/');
+}
+
+<nav class="anpm-nav" aria-label="ANPM">
+  <a href="@($"{prefix}/feed")">Feed overview</a>
+  <a href="@($"{prefix}/pins")">Pin matrix</a>
+</nav>
+
+@await Html.PartialAsync("/Pages/Shared/PageChrome/Title.cshtml", new PageChromeTitleModel("ANPM pin matrix"))
+@await Html.PartialAsync("/Pages/Shared/PageChrome/Subtitle.cshtml", new PageChromeSubtitleModel("Pinned vs present packages on the feed"))
+
+@if (Model.Flash is not null)
+{
+    <div class="anpm-flash" data-testid="anpm-sync-flash">
+      <p>Last sync: downloaded @Model.Flash.Downloaded, skipped @Model.Flash.Skipped.</p>
+    </div>
+}
+
+@if (!Model.Configured)
+{
+  @await Html.PartialAsync("/Pages/Shared/EmptyStates/Message.cshtml", new AIGuiders.UI.Core.EmptyStates.EmptyStateMessageModel(Model.ConfigError ?? "ANPM is not configured."))
+}
+else if (Model.Rows.Count == 0)
+{
+  @await Html.PartialAsync("/Pages/Shared/EmptyStates/Message.cshtml", new AIGuiders.UI.Core.EmptyStates.EmptyStateMessageModel("No pins in manifest."))
+}
+else
+{
+  <table class="anpm-table" data-testid="anpm-pin-matrix">
+    <thead>
+      <tr>
+        <th>Package</th>
+        <th>Version</th>
+        <th>State</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var row in Model.Rows)
+      {
+        var badgeClass = row.State switch
+        {
+            "present" => "anpm-badge-present",
+            "missing" => "anpm-badge-missing",
+            _ => "anpm-badge-extra",
+        };
+        <tr data-testid="anpm-pin-row">
+          <td>@row.Id</td>
+          <td>@row.Version</td>
+          <td class="@badgeClass">@row.State</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

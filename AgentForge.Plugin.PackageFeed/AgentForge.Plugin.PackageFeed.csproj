@@ -10,7 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Anpm.Core\Anpm.Core.csproj" />
+    <ProjectReference Include="..\Anpm.View\Anpm.View.csproj" />
     <ProjectReference Condition="'$(BuildForgePlugin)' == 'true'" Include="$(ForgeAbstractionsProject)" />
   </ItemGroup>
 

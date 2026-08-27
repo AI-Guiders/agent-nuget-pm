@@ -1,5 +1,6 @@
 using Anpm.Core;
 using Anpm.Core.Config;
+using Anpm.View;
 
 namespace Anpm.Host;
 
@@ -24,9 +25,12 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
         builder.WebHost.UseUrls(AnpmSettings.ResolveHostUrls());
+        builder.Services.AddSingleton<IAnpmViewConfig, BootstrapAnpmViewConfig>();
+        builder.Services.AddAnpmView();
 
         var app = builder.Build();
         app.MapFeedV3(runtime);
+        app.MapAnpmView();
         app.Run();
     }
 

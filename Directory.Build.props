@@ -3,5 +3,6 @@
     <GuidersPluginHostPackageVersion>0.1.0</GuidersPluginHostPackageVersion>
     <GuidersPluginHostRoot Condition="'$(GuidersPluginHostRoot)' == ''">$(MSBuildThisFileDirectory)..\guiders-plugin-host</GuidersPluginHostRoot>
     <UseLocalGuidersPluginHost Condition="'$(UseLocalGuidersPluginHost)' == '' and Exists('$(GuidersPluginHostRoot)\AIGuiders.PluginHost.slnx')">true</UseLocalGuidersPluginHost>
+    <GuidersUiPlatformRoot Condition="'$(GuidersUiPlatformRoot)' == ''">$(MSBuildThisFileDirectory)..\guiders-ui-platform</GuidersUiPlatformRoot>
   </PropertyGroup>
 </Project>

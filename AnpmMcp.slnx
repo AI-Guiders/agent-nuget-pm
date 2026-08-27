@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Anpm.Core/Anpm.Core.csproj" />
+  <Project Path="Anpm.View/Anpm.View.csproj" />
   <Project Path="Anpm.Host/Anpm.Host.csproj" />
   <Project Path="AnpmMcp/AnpmMcp.csproj" />
   <Project Path="AgentForge.Plugin.PackageFeed/AgentForge.Plugin.PackageFeed.csproj" />

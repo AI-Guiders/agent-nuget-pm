@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Anpm.Core\Anpm.Core.csproj" />
+    <ProjectReference Include="..\Anpm.View\Anpm.View.csproj" />
   </ItemGroup>
 
   <ItemGroup>

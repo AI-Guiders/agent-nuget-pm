@@ -1,0 +1,68 @@
+@using AIGuiders.UI.Core.PageChrome
+@model Anpm.View.Models.FeedOverviewModel
+@{
+    var prefix = Model.RoutePrefix.TrimEnd('/');
+}
+
+<nav class="anpm-nav" aria-label="ANPM">
+  <a href="@($"{prefix}/feed")">Feed overview</a>
+  <a href="@($"{prefix}/pins")">Pin matrix</a>
+</nav>
+
+@await Html.PartialAsync("/Pages/Shared/PageChrome/Title.cshtml", new PageChromeTitleModel("ANPM feed overview"))
+@await Html.PartialAsync("/Pages/Shared/PageChrome/Subtitle.cshtml", new PageChromeSubtitleModel("Manifest-driven offline NuGet feed"))
+
+@if (Model.Flash is not null)
+{
+    var flashClass = Model.Flash.Errors.Count > 0 ? "anpm-flash anpm-flash-error" : "anpm-flash";
+    <div class="@flashClass" data-testid="anpm-sync-flash">
+      @if (Model.Flash.DryRun)
+      {
+        <p>Dry-run sync: would download @Model.Flash.Downloaded, skip @Model.Flash.Skipped.</p>
+      }
+      else
+      {
+        <p>Sync complete: downloaded @Model.Flash.Downloaded, skipped @Model.Flash.Skipped.</p>
+      }
+      @foreach (var err in Model.Flash.Errors)
+      {
+        <p>@err</p>
+      }
+    </div>
+}
+
+@if (!Model.Configured)
+{
+  @await Html.PartialAsync("/Pages/Shared/EmptyStates/Message.cshtml", new AIGuiders.UI.Core.EmptyStates.EmptyStateMessageModel(Model.ConfigError ?? "ANPM is not configured."))
+}
+else if (Model.Status is not null)
+{
+  <dl class="anpm-meta">
+    <dt>Feed root</dt>
+    <dd data-testid="anpm-feed-root">@Model.Status.FeedRoot</dd>
+    <dt>Manifest</dt>
+    <dd>@Model.Status.ManifestPath</dd>
+    <dt>v3 index URL</dt>
+    <dd data-testid="anpm-v3-url">@Model.V3BaseUrl</dd>
+    <dt>Pinned packages</dt>
+    <dd>@Model.Status.Pinned.Count</dd>
+    <dt>Present on feed</dt>
+    <dd>@Model.Status.Present.Count</dd>
+    <dt>Missing</dt>
+    <dd data-testid="anpm-missing-count">@Model.Status.Missing.Count</dd>
+    <dt>Complete</dt>
+    <dd>@(Model.Status.IsComplete ? "yes" : "no")</dd>
+  </dl>
+
+  <div class="anpm-actions">
+    <form method="post" action="@($"{prefix}/sync")">
+      <input type="hidden" name="dryRun" value="true" />
+      <button type="submit">Dry-run sync</button>
+    </form>
+    <form method="post" action="@($"{prefix}/sync")">
+      <input type="hidden" name="dryRun" value="false" />
+      <input type="hidden" name="rebuildIndex" value="true" />
+      <button type="submit">Sync + rebuild index</button>
+    </form>
+  </div>
+}

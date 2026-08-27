@@ -28,6 +28,8 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 | **M0** | Spec + sync script pattern | **done** |
 | **M1** | Standalone host: feed + v3 index + MCP + HTTP | **done** |
 | **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) | **done** |
+| **F2** | CAD pilot (SSCAD UNC feed) | **done** — [CAD-PILOT.md](docs/CAD-PILOT.md) |
+| **M3** | **`Anpm.View`** standalone + Forge mount | **done** (baseline) — [ADR-0006](docs/adr/ANPM-ADR-0006-dual-delivery-and-human-view.md) |
 
 ## Docs
 
@@ -39,6 +41,7 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 - [M1 scaffold plan](docs/M1-SCAFFOLD.md)
 - [M0 spec](docs/M0-SPEC.md)
 - [M2 Forge plugin](docs/M2-FORGE-PLUGIN.md)
+- [CAD pilot (F2)](docs/CAD-PILOT.md)
 - [Roadmap](docs/ROADMAP.md)
 
 ## Quick start (M1 scaffold)
@@ -49,6 +52,8 @@ dotnet test
 # Copy config/anpm.toml.example → D:/anpm/anpm.toml and edit [feed] paths.
 ./scripts/Sync-AnpmFeed.ps1 -Config D:/anpm/anpm.toml -DryRun
 ./scripts/Start-AnpmHost.ps1 -Config D:/anpm/anpm.toml
+# Human View: http://127.0.0.1:5088/view/feed
+# CAD pilot: ./scripts/Invoke-CadPilotFeed.ps1 (see docs/CAD-PILOT.md)
 # MCP manifest for Cursor (~/.cursor/mcp.json):
 ./scripts/_Invoke-AnpmTool.ps1 -Project AnpmMcp/AnpmMcp.csproj -PayloadJson '{"tool":"anpm_mcp_export"}' -Config D:/anpm/anpm.toml
 # Or: args ["--config","D:/anpm/anpm.toml"], env {}
@@ -63,4 +68,4 @@ Point `nuget.config` package source at `http://127.0.0.1:5088/v3/index.json`.
 
 ## Status
 
-**M0–M2 shipped** — standalone ANPM + optional Forge plugin; WitDB index + CAD e2e = next.
+**M0–M2 + F2 + M3 baseline shipped** — standalone ANPM + Forge plugin + Human View; WitDB index = next.

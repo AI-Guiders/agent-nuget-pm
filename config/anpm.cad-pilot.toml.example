@@ -1,0 +1,18 @@
+# CAD pilot (F2) — copy outside git, e.g. D:/anpm/cad-pilot/anpm.toml
+#
+# UNC feed (operator contour):
+#   set ANPM_FEED_ROOT=\\dpc-av-m-cms\Repository\nuget-feed
+#   set ANPM_MANIFEST_PATH=D:\anpm\cad-pilot\cad-pilot.pins.json
+#
+# Precedence: tool args → ANPM_* env → this file → manifest defaults.
+
+version = 1
+
+[feed]
+root = "${ANPM_FEED_ROOT}"
+manifest_path = "${ANPM_MANIFEST_PATH}"
+
+[host]
+urls = "http://127.0.0.1:5088"
+v3_base_url = "http://127.0.0.1:5088/v3"
+rebuild_index_on_start = true

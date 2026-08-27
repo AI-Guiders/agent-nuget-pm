@@ -1,0 +1,11 @@
+{
+  "$schema": "./schema.v1.json",
+  "schema": "anpm/manifest/v1",
+  "description": "CAD pilot (F2) — PdfExtract / SSCAD offline feed pins. Deployment path via env ANPM_FEED_ROOT (see config/anpm.cad-pilot.toml.example).",
+  "feedRoot": "${ANPM_FEED_ROOT}",
+  "v3BaseUrl": "http://127.0.0.1:5088/v3",
+  "packages": [
+    { "id": "OutWit.Database.Core", "version": "14.0.1" },
+    { "id": "OutWit.Database.EntityFramework", "version": "14.0.1" }
+  ]
+}

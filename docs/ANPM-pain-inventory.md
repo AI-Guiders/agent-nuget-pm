@@ -81,6 +81,16 @@
 
 | ID | Боль | Кто | Откуда | ANPM-ответ | Статус |
 |----|------|-----|--------|------------|--------|
+| N-023 | **Bulk unlist** — у Deprecation есть «select all», у Listing — нет | human | [NuGetGallery#6959](https://github.com/NuGet/NuGetGallery/issues/6959) | `dotnet nuget delete` script; community tools (nuclear); L4 | **upstream** |
+| N-024 | CLI **`nuget delete`** на nuget.org = **unlist**, не delete — confusing name | human | NuGetGallery#6959, MS docs | Operator doc; L3 wrapper с правильными глаголами | open |
+| N-025 | **Permanent delete** пакетов нет (policy) — только unlist | ops | [deleting-packages](https://learn.microsoft.com/nuget/nuget-org/policies/deleting-packages) | Know the policy; L4 private registry if need hard delete | wont-fix (upstream) |
+| N-026 | **Deprecate ≠ unlist** — два отдельных UI flow | human | SO#50795559 | L3 lifecycle manifest: `deprecated` + `listed` desired state | open |
+| N-027 | Bulk **deprecate** CLI не сделали (bulk unlist tool — да, deprecate — нет) | ops | [NuGet/Home#9897](https://github.com/NuGet/Home/issues/9897) | Script against API if exists; else UI pain | **upstream** |
+
+### Trusted Publishing & auth
+
+| ID | Боль | Кто | Откуда | ANPM-ответ | Статус |
+|----|------|-----|--------|------------|--------|
 | N-020 | TP policy: **Package owner** = org, но workflow `user: LonelySoul` до завершения migration | ci | release.yml всех repos | Manifest `trusted_publish.user`; L3d validate workflow vs manifest | in-progress |
 | N-021 | TP создаётся из **personal menu**, не org menu — неочевидно | human | operator notes 2026-08 | Runbook в nuget-publishing + этот log | in-progress |
 | N-022 | Orphaned TP policies на старых `*-core` repos после monorepo merge | ops | [nuget-tp-migration-checklist](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-tp-migration-checklist.md) | Manual cleanup; L3d policy inventory | open |

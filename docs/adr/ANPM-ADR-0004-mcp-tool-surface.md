@@ -40,7 +40,7 @@ ADR-0001 named DOI-style tools (`anpm.feed.status`, …). MCP hosts and git-mcp 
 ### Non-goals (M1)
 
 - HTTP MCP transport
-- Push/publish tools (human `dotnet nuget push` remains escape hatch)
+- Push/publish tools (human `dotnet nuget push` remains escape hatch) — **superseded for L3:** see [ADR-0007](ANPM-ADR-0007-federation-registry-operations.md) (registry ops wave)
 - npm/OCI tools
 
 ## Consequences

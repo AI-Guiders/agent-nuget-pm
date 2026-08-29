@@ -30,6 +30,7 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 | **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) | **done** |
 | **F2** | CAD pilot (SSCAD UNC feed) | **done** — [CAD-PILOT.md](docs/CAD-PILOT.md) |
 | **M3** | **`Anpm.View`** standalone + Forge mount | **done** (baseline) — [ADR-0006](docs/adr/ANPM-ADR-0006-dual-delivery-and-human-view.md) |
+| **L3** | Federation **registry ops** (publish orchestration, owners drift, symbols) | **proposed** — [ADR-0007](docs/adr/ANPM-ADR-0007-federation-registry-operations.md) |
 
 ## Docs
 

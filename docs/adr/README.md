@@ -10,3 +10,4 @@ Naming: `ANPM-ADR-NNNN-<topic>.md`
 | [0004 MCP tool surface](ANPM-ADR-0004-mcp-tool-surface.md) | Accepted |
 | [0005 TOML config](ANPM-ADR-0005-toml-config.md) | Accepted |
 | [0006 Dual delivery + Human View](ANPM-ADR-0006-dual-delivery-and-human-view.md) | Accepted |
+| [0007 Federation registry ops (L3)](ANPM-ADR-0007-federation-registry-operations.md) | Proposed |

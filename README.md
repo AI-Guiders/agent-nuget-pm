@@ -35,6 +35,7 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 ## Docs
 
 - [ADR index](docs/adr/README.md)
+- [**Pain inventory**](docs/ANPM-pain-inventory.md) — living friction log (как FORGE-pain-inventory)
 - [Overview ADR](docs/adr/ANPM-ADR-0001-overview.md)
 - [MCP tool surface ADR](docs/adr/ANPM-ADR-0004-mcp-tool-surface.md)
 - [TOML config ADR](docs/adr/ANPM-ADR-0005-toml-config.md)

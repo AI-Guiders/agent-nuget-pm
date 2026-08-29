@@ -11,3 +11,5 @@ Naming: `ANPM-ADR-NNNN-<topic>.md`
 | [0005 TOML config](ANPM-ADR-0005-toml-config.md) | Accepted |
 | [0006 Dual delivery + Human View](ANPM-ADR-0006-dual-delivery-and-human-view.md) | Accepted |
 | [0007 Federation registry ops (L3)](ANPM-ADR-0007-federation-registry-operations.md) | Proposed |
+
+Living friction log: [ANPM-pain-inventory.md](../ANPM-pain-inventory.md) (формат как [FORGE-pain-inventory](https://github.com/AI-Guiders/agent-forge/blob/main/design/FORGE-pain-inventory.md)).

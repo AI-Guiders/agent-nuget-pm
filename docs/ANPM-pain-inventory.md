@@ -59,7 +59,7 @@
 | N-001 | `dotnet pack` all + push nupkg `--skip-duplicate` + unconditional snupkg → **symbol validation failed** (PDB ≠ published DLL) | ci | guiders-core 0.4.22, [NuGet/Home#10475](https://github.com/NuGet/Home/issues/10475) | **Paired push:** snupkg только если nupkg загружен в этом прогоне; `scripts/nuget/push-artifacts.sh`; `Deterministic` + `ContinuousIntegrationBuild` | **resolved** (federation CI) |
 | N-002 | Repair failed symbols для уже опубликованной версии — неочевидный recipe (какой commit, push только snupkg) | human+agent | migration chat 2026-08 | Док: [nuget-publishing.md § Symbols](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-publishing.md); L3 `anpm_registry_status` symbol health | in-progress |
 | N-003 | Версия в `<Version>` csproj, тег — только триггер; легко забыть bump нужных пакетов в monorepo | human | guiders-core/platform release | L3 release plan: diff bumped PackageIds vs manifest | open |
-| N-005 | Symbols indexing: «up to an hour», статус только на package page — непонятно ждать или retry | human | [NuGet symbols workflow wiki](https://github.com/NuGet/Home/wiki/Symbols-Package-Upload-and-Delete-Workflow) | L3 symbol health poll; upstream | **upstream** |
+| N-005 | Symbols indexing: «up to an hour», статус per-package на gallery — нет fleet view после monorepo release | human | [NuGet symbols workflow wiki](https://github.com/NuGet/Home/wiki/Symbols-Package-Upload-and-Delete-Workflow) | L3 `anpm_registry_status` symbol health (nice-to-have): poll package pages / search, manifest × pending\|ok\|failed | backlog (nice-to-have) |
 
 ### Ownership & org migration
 
@@ -122,7 +122,8 @@
 | Wave | Боли | Артефакт |
 |------|------|----------|
 | **L3a** | N-010–N-019, N-037 | `registry.toml`, `anpm_registry_status`, owners drift |
-| **L3b** | N-001–N-003, N-005 | publish orchestrator, CI adoption (done: push-artifacts.sh) |
+| **L3b** | N-001–N-003 | publish orchestrator, CI adoption (done: push-artifacts.sh) |
+| **L3b+** | N-005 | symbol indexing fleet status (nice-to-have; ~poll + parse) |
 | **L3c** | N-011, N-023–N-027, N-040 | `Anpm.View` Registry slice + lifecycle |
 | **L3d** | N-013, N-020–N-022, N-028–N-033 | TP validation, prefix checklist |
 | **L4?** | N-030, N-040 | Scoped public registry + slash mutate |

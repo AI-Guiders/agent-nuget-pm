@@ -27,9 +27,11 @@
 **Фильтр фич** (из ADR-0002 / 0007):
 
 1. **Declare, don’t click** — desired state в manifest; drift detect, не 46× UI.
-2. **Paired invariants** — nupkg+snupkg, owners+TP, version+commit — policy, не tribal CI knowledge.
+2. **Paired invariants** — nupkg+snupkg **push policy**, owners+TP — когда registry и CI в одном контуре.
 3. **L3 ≠ clone nuget.org** — control plane и air-gap feed; публичный gallery — отдельное решение (L4).
 4. **MCP + slash co-primary** — registry ops без «открой nuget.org, вкладка Owners».
+
+**Не наш lane (не пишем сюда):** MSBuild target order, Fody/IL-weave, «как правильно pack symbols» — это authoring/dotnet; registry честно отклонил mismatch, и это correct behavior.
 
 ---
 
@@ -57,9 +59,7 @@
 | N-001 | `dotnet pack` all + push nupkg `--skip-duplicate` + unconditional snupkg → **symbol validation failed** (PDB ≠ published DLL) | ci | guiders-core 0.4.22, [NuGet/Home#10475](https://github.com/NuGet/Home/issues/10475) | **Paired push:** snupkg только если nupkg загружен в этом прогоне; `scripts/nuget/push-artifacts.sh`; `Deterministic` + `ContinuousIntegrationBuild` | **resolved** (federation CI) |
 | N-002 | Repair failed symbols для уже опубликованной версии — неочевидный recipe (какой commit, push только snupkg) | human+agent | migration chat 2026-08 | Док: [nuget-publishing.md § Symbols](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-publishing.md); L3 `anpm_registry_status` symbol health | in-progress |
 | N-003 | Версия в `<Version>` csproj, тег — только триггер; легко забыть bump нужных пакетов в monorepo | human | guiders-core/platform release | L3 release plan: diff bumped PackageIds vs manifest | open |
-| N-004 | **Post-compile IL-weave** (Fody/Cecil) меняет DLL после PDB → snupkg checksum mismatch — **ожидаемо**, не баг registry | ci | Cecil#610, SO#62630172 | Pack **после** weave из финальных артефактов; или PDB в nupkg; не blame nuget.org | open (operator) |
 | N-005 | Symbols indexing: «up to an hour», статус только на package page — непонятно ждать или retry | human | [NuGet symbols workflow wiki](https://github.com/NuGet/Home/wiki/Symbols-Package-Upload-and-Delete-Workflow) | L3 symbol health poll; upstream | **upstream** |
-| N-006 | **Локальный snupkg** из folder feed — step-in debug не работает как ожидаешь | human | [NuGet/Home#8809](https://github.com/NuGet/Home/issues/8809) | Air-gap: embed PDB в nupkg или manual cache; ANPM L2 docs | open |
 
 ### Ownership & org migration
 
@@ -122,7 +122,7 @@
 | Wave | Боли | Артефакт |
 |------|------|----------|
 | **L3a** | N-010–N-019, N-037 | `registry.toml`, `anpm_registry_status`, owners drift |
-| **L3b** | N-001–N-006, N-003 | publish orchestrator, CI adoption (done: push-artifacts.sh) |
+| **L3b** | N-001–N-003, N-005 | publish orchestrator, CI adoption (done: push-artifacts.sh) |
 | **L3c** | N-011, N-023–N-027, N-040 | `Anpm.View` Registry slice + lifecycle |
 | **L3d** | N-013, N-020–N-022, N-028–N-033 | TP validation, prefix checklist |
 | **L4?** | N-030, N-040 | Scoped public registry + slash mutate |

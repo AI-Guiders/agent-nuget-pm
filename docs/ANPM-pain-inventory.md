@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Status** | Living doc |
-| **Date** | 2026-08-29 |
+| **Date** | 2026-08-30 |
 | **Relates to** | [ANPM-ADR-0001](adr/ANPM-ADR-0001-overview.md), [ANPM-ADR-0002](adr/ANPM-ADR-0002-not-baget-nexus-clone.md), [ANPM-ADR-0007](adr/ANPM-ADR-0007-federation-registry-operations.md), [guiders-core nuget-publishing](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-publishing.md) |
 | **North star** | Friction insight → artifact; не «ещё один BaGet», а **registry mechanics** для federation (air-gap L2 + nuget.org L3 + будущий command layer) |
 
@@ -66,9 +66,9 @@
 | ID | Боль | Кто | Откуда | ANPM-ответ | Статус |
 |----|------|-----|--------|------------|--------|
 | N-010 | **Нет public API** add/remove package owners — только UI или email support | human+agent | org migration 2026-08 | L3 `anpm_registry_owners_drift`; `anpm_support_bulk_owners` (escape); **не** «support кликает вместо нас» как SSOT | in-progress |
-| N-011 | ~46 пакетов × Manage package → Owners → Add → accept invite | human | federation inventory | Manifest `owners = ["AIGuiders", …]`; drift report; `Add-OrgPackageOwners.ps1` (audit + open tabs) | in-progress |
+| N-011 | ~46 пакетов × Manage package → Owners → Add → accept invite | human | federation inventory | Manifest `owners.required`; [Get-OwnersDrift.ps1](../scripts/Get-OwnersDrift.ps1); [nuget-org-owners-batch.md](runbooks/nuget-org-owners-batch.md) | in-progress |
 | N-012 | Поле **Add owner** / **Package owner** **не триммит пробелы**: `AIGuiders` OK, ` AIGuiders` → Owner not found | human | nuget.org UI 2026-08-29 | Док + operator warning; upstream issue (если заведём) | **upstream** |
-| N-013 | Prefix reservation `AIGuiders.*` — ручной email `account@nuget.org`, субъективные критерии | ops | [prefix reservation docs](https://learn.microsoft.com/nuget/nuget-org/id-prefix-reservation) | L3d checklist в manifest; support ticket template | open |
+| N-013 | Prefix reservation `AIGuiders.*` — ручной email `account@nuget.org`, субъективные критерии | ops | [prefix reservation docs](https://learn.microsoft.com/nuget/nuget-org/id-prefix-reservation) | [prefix-reservation-email.md](runbooks/prefix-reservation-email.md); manifest `[registry.prefix_reservation]` | in-progress |
 | N-014 | **Bulk edit owners** — .NET Foundation: «40+ packages 1-by-1 for co-ownership» | human | [NuGetGallery#9675](https://github.com/NuGet/NuGetGallery/issues/9675) | L3 drift + support bulk; L4 mutate | open |
 | N-015 | **Owners нет в registration API** — только search `packageid:` или **undocumented** `owners.json` blob | agent | [NuGetGallery#5647](https://github.com/NuGet/NuGetGallery/issues/5647) | Search API в drift tool; не полагаться на owners.json в prod | **upstream** |
 | N-016 | `<authors>` в nuspec **не** = owners на nuget.org; ownership = кто push'нул | human | [MS publish docs](https://learn.microsoft.com/nuget/nuget-org/publish-a-package#manage-package-owners-on-nugetorg) | Manifest owners ≠ nuspec authors; onboarding doc | open |
@@ -76,6 +76,9 @@
 | N-018 | Co-owner: Add → **email invite** → pending → accept as org admin — двойной цикл | human | nuget.org Owners UI | Runbook; L3 pending-invites drift (если API появится) | open |
 | N-019 | **Transfer ownership** = add new → wait confirm → remove old; не atomic | human | MS publish docs | L4 `/package transfer`; пока checklist | open |
 | N-037 | Manage package = accordion **Owners / Deprecation / Listing / Docs** per version — «археология» | human | unlist/deprecate how-tos | Anpm.View Registry slice; slash intent | open |
+| N-042 | **Org на nuget.org не publisher principal** — нет login/push/OIDC как org; только members от себя | ops | TP smoke + MS org spec 2026-08-30 | [ANPM-thesis-federation-scale.md](ANPM-thesis-federation-scale.md); manifest documents split | open |
+| N-043 | **Новый PackageId** → owner = pusher (LonelySoul); org в Owners не наследуется | ci | platform 0.11.0 slice 2026-08-30 | Post-release drift gate; N-011 batch runbook | in-progress |
+| N-044 | **Fleet federation** (70+ IDs) vs gallery flow solo-author — AI-era solocorp = default, не edge | ops | operator session 2026-08-30 | ANPM L3 declare+drift; не «ещё чеклист» | in-progress |
 
 ### Package lifecycle (unlist, deprecate, delete)
 
@@ -91,13 +94,14 @@
 
 | ID | Боль | Кто | Откуда | ANPM-ответ | Статус |
 |----|------|-----|--------|------------|--------|
-| N-020 | TP policy: **Package owner** = org, но workflow `user: LonelySoul` до завершения migration | ci | release.yml всех repos | Manifest `trusted_publish.user`; L3d validate workflow vs manifest | in-progress |
-| N-021 | TP создаётся из **personal menu**, не org menu — неочевидно | human | operator notes 2026-08 | Runbook в nuget-publishing + этот log | in-progress |
+| N-020 | TP: **Package owner** в политике = org scope; workflow `user:` = **policy creator** (LonelySoul), не org — permanent | ci | TP smoke 2026-08-30 | `registry/guiders-federation.toml` `[registry.trusted_publish]`; не «migration» | **resolved** (documented) |
+| N-021 | TP создаётся из **personal menu**; отдельного org-login нет — Package owner dropdown ≠ OIDC identity | human | operator notes 2026-08-30 | Runbooks + manifest; N-042 | **resolved** (documented) |
 | N-022 | Orphaned TP policies на старых `*-core` repos после monorepo merge | ops | [nuget-tp-migration-checklist](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-tp-migration-checklist.md) | GitHub legacy repos deleted (audit 2026-08-30); nuget.org UI — manual dedupe | in-progress |
 | N-028 | TP policy привязана к **NuGet owner account** → workflow может push **все** пакеты этого owner, не один repo | ops | [Renato Golia TP post](https://renatogolia.com/2026/08/07/publish-nuget-packages-trusted-publishing-github-actions/) | Отдельный org account per hyperlane; GH Environment scope | open |
 | N-029 | Temporary API key **~1 hour** — login слишком рано в длинном workflow → expired push | ci | [Trusted Publishing docs](https://learn.microsoft.com/nuget/nuget-org/trusted-publishers) | Login step immediately before push (у нас так) | in-progress |
 | N-032 | **Private repo** TP policy: 7-day bootstrap, иначе inactive до re-activate | human | .NET blog TP announcement | Runbook для новых private repos | open |
 | N-033 | **API keys max 30 days** (new keys Aug 2026) — rotation theater для non-TP flows | ops | [C# Corner TP article](https://www.c-sharpcorner.com/article/nuget-trusted-publishing-designing-keyless-package-releases-for-net/) | Migrate federation to TP; ANPM orchestrator OIDC-only | open |
+| N-045 | `user: AIGuiders` в CI → 401; NuGet ищет policies **owned by** creator username, не Package owner | ci | guiders-plugin-host smoke 2026-08-30 | Document in manifest; never set user to org name | **resolved** (documented) |
 
 ### Discoverability & ecosystem
 
@@ -121,7 +125,7 @@
 
 | Wave | Боли | Артефакт |
 |------|------|----------|
-| **L3a** | N-010–N-019, N-037 | `registry.toml`, `anpm_registry_status`, owners drift |
+| **L3a** | N-010–N-019, N-037, N-042–N-045 | `registry/guiders-federation.toml`, `Get-OwnersDrift.ps1`, owners runbooks |
 | **L3b** | N-001–N-003 | publish orchestrator, CI adoption (done: push-artifacts.sh) |
 | **L3b+** | N-005 | symbol indexing fleet status (nice-to-have; ~poll + parse) |
 | **L3c** | N-011, N-023–N-027, N-040 | `Anpm.View` Registry slice + lifecycle |

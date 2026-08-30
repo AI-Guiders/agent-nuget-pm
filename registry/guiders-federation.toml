@@ -1,0 +1,55 @@
+# ANPM L3 — desired public registry state for AI-Guiders federation.
+# Live owners: scripts/Get-OwnersDrift.ps1 (NuGet search API).
+# See docs/runbooks/nuget-org-owners-batch.md
+
+[registry]
+upstream = "https://api.nuget.org/v3/index.json"
+org_owner = "AIGuiders"
+personal_co_owner = "LonelySoul" # optional co-owner; omit from desired if org-only target
+
+[registry.prefix_reservation]
+holder = "AIGuiders"
+glob = "AIGuiders.*"
+# Authorized publishers: all current/future AIGuiders org members (see prefix-reservation-email.md)
+
+[registry.trusted_publish]
+# Policy creator (NuGet/login user:) — NOT package owner. Org cannot OIDC-login.
+user = "LonelySoul"
+package_owner = "AIGuiders"
+
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-core"
+workflow = "release.yml"
+glob = "AIGuiders.*"
+
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-platform"
+workflow = "release.yml"
+glob = "AIGuiders.Platform.*"
+
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-ui-platform"
+workflow = "release.yml"
+glob = "AIGuiders.UI.*"
+
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-plugin-host"
+workflow = "release.yml"
+glob = "AIGuiders.PluginHost.*"
+
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-assist"
+workflow = "release.yml"
+glob = "AIGuiders.Cli,AIGuiders.DotnetMcp.Templates,AIGuiders.DotnetTools.*,AIGuiders.McpToolManifest"
+
+[owners]
+# Every ship package under these monorepo prefixes must include org_owner.
+required = ["AIGuiders"]
+optional = ["LonelySoul"]
+
+[owners.ship_prefixes]
+core = "AIGuiders."
+platform = "AIGuiders.Platform."
+ui = "AIGuiders.UI."
+plugin_host = "AIGuiders.PluginHost."
+assist = "AIGuiders."

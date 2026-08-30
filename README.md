@@ -30,12 +30,15 @@ Many repos, no `nuget.org`, no corporate proxy — but `dotnet restore` still ne
 | **M2** | Optional **Forge zoo plugin** (`Plugin.PackageFeed`) | **done** |
 | **F2** | CAD pilot (SSCAD UNC feed) | **done** — [CAD-PILOT.md](docs/CAD-PILOT.md) |
 | **M3** | **`Anpm.View`** standalone + Forge mount | **done** (baseline) — [ADR-0006](docs/adr/ANPM-ADR-0006-dual-delivery-and-human-view.md) |
-| **L3** | Federation **registry ops** (publish orchestration, owners drift, symbols) | **proposed** — [ADR-0007](docs/adr/ANPM-ADR-0007-federation-registry-operations.md) |
+| **L3** | Federation **registry ops** (publish orchestration, owners drift, symbols) | **in-progress** — [ADR-0007](docs/adr/ANPM-ADR-0007-federation-registry-operations.md) |
 
 ## Docs
 
 - [ADR index](docs/adr/README.md)
 - [**Pain inventory**](docs/ANPM-pain-inventory.md) — living friction log (как FORGE-pain-inventory)
+- [**Federation thesis**](docs/ANPM-thesis-federation-scale.md) — solocorp / fleet NuGet vs gallery flow
+- [Registry manifest](registry/guiders-federation.toml) + [owners drift](scripts/Get-OwnersDrift.ps1) (L3a)
+- Runbooks: [owners batch](docs/runbooks/nuget-org-owners-batch.md) · [prefix reservation](docs/runbooks/prefix-reservation-email.md)
 - [Overview ADR](docs/adr/ANPM-ADR-0001-overview.md)
 - [MCP tool surface ADR](docs/adr/ANPM-ADR-0004-mcp-tool-surface.md)
 - [TOML config ADR](docs/adr/ANPM-ADR-0005-toml-config.md)

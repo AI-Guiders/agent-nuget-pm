@@ -15,7 +15,7 @@ AI Guiders ships **dozens** of NuGet packages across monorepos (`guiders-core`, 
 | Org migration | No owner API — UI per package or email support (clicks move, problem stays) |
 | Owner lookup UI | **No trim** — `" AIGuiders"` → Owner not found; `"AIGuiders"` OK ([pain N-012](../ANPM-pain-inventory.md)) |
 | Monorepo release | `dotnet pack` all → `--skip-duplicate` on nupkg → snupkg still uploads → symbol validation fails ([NuGet/Home#10475](https://github.com/NuGet/Home/issues/10475)) |
-| Trusted Publishing | Policy on user menu; Package owner = org; workflow `user:` must match |
+| Trusted Publishing | Policy creator = personal `user:` in CI; Package owner in policy = scope; org cannot OIDC-login |
 | Prefix reservation | Manual email to account@nuget.org |
 | Desired state | No declarative “these 46 packages are owned by org X with symbols on” |
 

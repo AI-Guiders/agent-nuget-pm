@@ -16,7 +16,7 @@ if (-not $PlatformRoot) {
     $PlatformRoot = (Resolve-Path (Join-Path $repoRoot '..\guiders-platform')).Path
 }
 
-$sln = Join-Path $PlatformRoot 'AIGuiders.Platform.sln'
+$sln = Join-Path $PlatformRoot 'AIGuiders.Platform.slnx'
 if (-not (Test-Path $sln)) {
     throw "guiders-platform solution not found: $sln"
 }

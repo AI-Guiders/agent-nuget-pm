@@ -93,7 +93,7 @@
 |----|------|-----|--------|------------|--------|
 | N-020 | TP policy: **Package owner** = org, но workflow `user: LonelySoul` до завершения migration | ci | release.yml всех repos | Manifest `trusted_publish.user`; L3d validate workflow vs manifest | in-progress |
 | N-021 | TP создаётся из **personal menu**, не org menu — неочевидно | human | operator notes 2026-08 | Runbook в nuget-publishing + этот log | in-progress |
-| N-022 | Orphaned TP policies на старых `*-core` repos после monorepo merge | ops | [nuget-tp-migration-checklist](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-tp-migration-checklist.md) | Manual cleanup; L3d policy inventory | open |
+| N-022 | Orphaned TP policies на старых `*-core` repos после monorepo merge | ops | [nuget-tp-migration-checklist](https://github.com/AI-Guiders/guiders-core/blob/main/docs/nuget-tp-migration-checklist.md) | GitHub legacy repos deleted (audit 2026-08-30); nuget.org UI — manual dedupe | in-progress |
 | N-028 | TP policy привязана к **NuGet owner account** → workflow может push **все** пакеты этого owner, не один repo | ops | [Renato Golia TP post](https://renatogolia.com/2026/08/07/publish-nuget-packages-trusted-publishing-github-actions/) | Отдельный org account per hyperlane; GH Environment scope | open |
 | N-029 | Temporary API key **~1 hour** — login слишком рано в длинном workflow → expired push | ci | [Trusted Publishing docs](https://learn.microsoft.com/nuget/nuget-org/trusted-publishers) | Login step immediately before push (у нас так) | in-progress |
 | N-032 | **Private repo** TP policy: 7-day bootstrap, иначе inactive до re-activate | human | .NET blog TP announcement | Runbook для новых private repos | open |

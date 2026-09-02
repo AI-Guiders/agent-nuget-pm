@@ -42,7 +42,10 @@ github = "AI-Guiders/guiders-assist"
 workflow = "release.yml"
 glob = "AIGuiders.Cli,AIGuiders.DotnetMcp.Templates,AIGuiders.DotnetTools.*,AIGuiders.McpToolManifest"
 
-# guiders-fsharp — private GitHub. Platform.Modeling.* (incl. LRC adapters) = sibling refs only; no public NuGet TP until repo goes public.
+[[trusted_publish.repo]]
+github = "AI-Guiders/guiders-fsharp"
+workflow = "release.yml"
+glob = "AIGuiders.Platform.Modeling.*"
 
 [owners]
 # Every ship package under these monorepo prefixes must include org_owner.
@@ -52,6 +55,7 @@ optional = ["LonelySoul"]
 [owners.ship_prefixes]
 core = "AIGuiders."
 platform = "AIGuiders.Platform."
+modeling = "AIGuiders.Platform.Modeling."
 ui = "AIGuiders.UI."
 plugin_host = "AIGuiders.PluginHost."
 assist = "AIGuiders."
